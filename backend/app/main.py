@@ -1,6 +1,7 @@
 """FastAPI application for SupplyShield."""
 
 from contextlib import asynccontextmanager
+import os
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Path, Query
@@ -14,6 +15,22 @@ from .schemas import (DisruptionRequest, DisruptionSimulation, NetworkGraph, Pro
 load_dotenv()
 
 
+DEFAULT_CORS_ORIGINS = (
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:6969",
+    "http://127.0.0.1:6969",
+    "https://supplyshield-web-git-main-venkatesh721s-projects.vercel.app",
+)
+
+
+def cors_origins() -> list[str]:
+    """Return the built-in frontend origins plus deployment-specific additions."""
+    configured = os.getenv("CORS_ORIGINS", "")
+    extra_origins = tuple(origin.strip() for origin in configured.split(",") if origin.strip())
+    return list(dict.fromkeys((*DEFAULT_CORS_ORIGINS, *extra_origins)))
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     yield
@@ -21,7 +38,14 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="SupplyShield API", version="0.1.0", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], allow_credentials=True, allow_methods=["GET", "POST"], allow_headers=["*"])
+# Register middleware before route declarations so browser OPTIONS preflights are handled.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins(),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def graph_error(detail: str, action):

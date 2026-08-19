@@ -1,7 +1,9 @@
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+const API_URL = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000').replace(/\/$/, '')
 
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, { headers: { 'Content-Type': 'application/json', ...options?.headers }, ...options })
+  const headers = new Headers(options?.headers)
+  if (options?.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
+  const response = await fetch(`${API_URL}${path}`, { ...options, headers })
   if (!response.ok) throw new Error('Request failed')
   return response.json() as Promise<T>
 }

@@ -9,6 +9,18 @@ from app.main import app
 client = TestClient(app)
 
 
+def test_cors_preflight_allows_dashboard_and_suppliers():
+    headers = {
+        "Origin": "http://localhost:5173",
+        "Access-Control-Request-Method": "GET",
+        "Access-Control-Request-Headers": "content-type",
+    }
+    for path in ("/api/dashboard/summary", "/api/suppliers"):
+        response = client.options(path, headers=headers)
+        assert response.status_code == 200
+        assert response.headers["access-control-allow-origin"] == "http://localhost:5173"
+
+
 def test_health_reports_connected_database(monkeypatch):
     monkeypatch.setattr(database, "verify_connectivity", lambda: None)
     response = client.get("/health")
@@ -30,6 +42,17 @@ def test_dashboard_summary_returns_graph_totals(monkeypatch):
     response = client.get("/api/dashboard/summary")
     assert response.status_code == 200
     assert response.json()["critical_single_source_components"] == 4
+
+
+def test_suppliers_returns_json(monkeypatch):
+    monkeypatch.setattr(graph_service, "suppliers", lambda *_args: [{
+        "id": "SUP-001", "name": "Example Supplier", "country": "India",
+        "region": "South Asia", "reliability_score": 95, "status": "active",
+        "supplied_component_count": 2, "active_risk_count": 0,
+    }])
+    response = client.get("/api/suppliers")
+    assert response.status_code == 200
+    assert response.json()[0]["id"] == "SUP-001"
 
 
 def test_single_source_component_contract(monkeypatch):

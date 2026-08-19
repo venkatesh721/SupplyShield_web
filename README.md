@@ -60,7 +60,7 @@ COGNODB_PASSWORD=replace-with-your-password
 Optional frontend configuration is in `frontend/.env`:
 
 ```env
-VITE_API_URL=http://localhost:8000
+VITE_API_BASE_URL=http://localhost:8000
 ```
 
 ## Local installation and run
@@ -161,11 +161,11 @@ Create the `docs/screenshots/` directory, save each image with the listed filena
 2. Deploy `backend/` to a free Python service such as Render or Railway. Use build command `pip install -r requirements.txt` and start command `uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
 3. Seed the deployed database once using the provider shell or a secure local run pointed to the production CognoDB instance.
 4. Deploy `frontend/` to Vercel, Netlify, or Cloudflare Pages with build command `npm run build` and output directory `dist`.
-5. Set `VITE_API_URL` to the deployed backend URL and add the frontend URL to the backend CORS allowlist in `app/main.py`.
+5. Set `VITE_API_BASE_URL` to the deployed backend URL. Add any additional frontend domains with the backend `CORS_ORIGINS` environment variable.
 
 ## Known limitations
 
 - The current dashboard risk chart is a compact KPI visualization rather than a historical trend chart.
 - The supplied seed data is fictional and intentionally small for a take-home demo.
-- CORS origins are configured for localhost; production requires explicit deployed-origin configuration.
+- Standard localhost and the deployed Vercel origin are allowed by default; add other deployment origins with `CORS_ORIGINS`.
 - Graph visualization lays out a focused dependency view; very large networks will need pagination, clustering, and server-side limits.
