@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #0F172A; background: #F6F8FC; }
+body { margin: 0; min-width: 320px; background: #F6F8FC; }
+
+@layer components {
+  .field { @apply min-h-10 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition duration-200 placeholder:text-slate-400 focus:border-teal-600 focus:ring-2 focus:ring-teal-100; }
+  .card { @apply rounded-xl border bg-white p-5 transition duration-200; border-color: #E3EAF2; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06); }
+  .card:hover { transform: translateY(-3px); border-color: #CBD9E7; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.11); }
+  .badge { @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize; }
+  .btn-primary { @apply inline-flex min-h-10 items-center justify-center rounded-lg bg-[#0F9D9A] px-4 py-2 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#0B7F7C] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50; box-shadow: 0 4px 12px rgba(15, 157, 154, 0.22); }
+  .btn-secondary { @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition duration-200 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2; }
+}
+
+/* Surface hierarchy for the enterprise workspace. */
+header { box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05); }
+aside { background: linear-gradient(180deg, #0B1327 0%, #111C35 100%) !important; box-shadow: 8px 0 24px rgba(15, 23, 42, 0.12); }
+aside nav a[aria-current="page"] { background: linear-gradient(90deg, #1E3A5F 0%, #244B78 100%) !important; box-shadow: inset 3px 0 0 #2DD4BF, 0 6px 14px rgba(0, 0, 0, 0.16); }
+aside nav a:not([aria-current="page"]):hover { background: rgba(255, 255, 255, 0.06) !important; }
+table thead { background: #F1F5F9; }
+table tbody tr { transition: background-color 180ms ease; }
+table tbody tr:hover { background: #F8FAFC; }
+.page-title { border: 1px solid #DDE9F3; border-radius: 20px; background: linear-gradient(110deg, #EEF6FF 0%, #F8FBFF 52%, #E6F7F5 100%); padding: 1.2rem 1.35rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06); }
+.page-title > div:first-child { border-left: 3px solid #0F9D9A; padding-left: .75rem; }
+.page-title .btn-primary { box-shadow: 0 8px 18px rgba(15, 157, 154, 0.24); }
+.page-title .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15, 157, 154, 0.29); }
+.stat-card { border-top-width: 3px; background: linear-gradient(180deg, #FFFFFF 0%, #FCFDFE 100%); }
+.stat-navy, .stat-blue { border-top-color: #2563EB; }
+.stat-teal { border-top-color: #0F9D9A; }
+.stat-amber { border-top-color: #F59E0B; }
+.stat-red { border-top-color: #DC2626; }
+.stat-rose { border-top-color: #E11D48; }
+main { background: radial-gradient(circle at 92% 7%, rgba(20, 184, 166, 0.08), transparent 28%), radial-gradient(circle at 4% 92%, rgba(59, 130, 246, 0.06), transparent 25%); }
+.react-flow { background: #F8FAFC; }
+.react-flow__controls { border: 1px solid #E2E8F0 !important; border-radius: 8px !important; overflow: hidden; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); }
+.react-flow__controls-button { background: white !important; border-bottom-color: #E2E8F0 !important; color: #0F172A !important; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; } }
