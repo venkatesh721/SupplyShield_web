@@ -1,9 +1,14 @@
-const API_URL = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000').replace(/\/$/, '')
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '')
+
+if (!API_BASE_URL) {
+  throw new Error('VITE_API_BASE_URL must be set to the FastAPI backend URL.')
+}
 
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const headers = new Headers(options?.headers)
   if (options?.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers })
+  const url = new URL(path.replace(/^\//, ''), `${API_BASE_URL}/`)
+  const response = await fetch(url, { ...options, headers })
   if (!response.ok) throw new Error('Request failed')
   return response.json() as Promise<T>
 }
