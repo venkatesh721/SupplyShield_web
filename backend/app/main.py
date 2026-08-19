@@ -21,6 +21,7 @@ DEFAULT_CORS_ORIGINS = (
     "http://localhost:6969",
     "http://127.0.0.1:6969",
     "https://supplyshield-web-git-main-venkatesh721s-projects.vercel.app",
+    "https://supplyshield-web.vercel.app",
 )
 
 
