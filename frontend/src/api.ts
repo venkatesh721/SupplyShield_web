@@ -1,13 +1,15 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
-if (!API_BASE_URL) {
-  throw new Error('VITE_API_BASE_URL must be set to the FastAPI backend URL.')
+if (!rawApiBaseUrl) {
+  throw new Error("VITE_API_BASE_URL is required for the frontend build")
 }
+
+const API_BASE_URL = rawApiBaseUrl.replace(/\/$/, "")
 
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const headers = new Headers(options?.headers)
   if (options?.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
-  const url = new URL(path.replace(/^\//, ''), `${API_BASE_URL.replace(/\/$/, '')}/`)
+  const url = new URL(path.replace(/^\//, ''), `${API_BASE_URL}/`)
   const response = await fetch(url, { ...options, headers })
   if (!response.ok) throw new Error('Request failed')
   return response.json() as Promise<T>
