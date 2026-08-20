@@ -1,18 +1,14 @@
-const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL
-
-if (!rawApiBaseUrl) {
-  throw new Error("VITE_API_BASE_URL is required for the frontend build")
-}
-
-const API_BASE_URL = rawApiBaseUrl.replace(/\/$/, "")
+import type { AxiosRequestConfig } from 'axios'
+import client from './api/client'
 
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
-  const headers = new Headers(options?.headers)
-  if (options?.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
-  const url = new URL(path.replace(/^\//, ''), `${API_BASE_URL}/`)
-  const response = await fetch(url, { ...options, headers })
-  if (!response.ok) throw new Error('Request failed')
-  return response.json() as Promise<T>
+  const response = await client.request<T>({
+    url: path,
+    method: options?.method ?? 'GET',
+    data: options?.body,
+    headers: options?.headers as AxiosRequestConfig['headers'],
+  })
+  return response.data
 }
 
 export type Supplier = { id: string; name: string; country: string; reliability_score: number; status: string; region?: string; supplied_component_count: number; active_risk_count: number }
