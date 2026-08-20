@@ -14,14 +14,17 @@ from .schemas import (DisruptionRequest, DisruptionSimulation, NetworkGraph, Pro
 
 load_dotenv()
 
+DEFAULT_CORS_ORIGINS = (
+    "http://localhost:5173",
+    "http://localhost:6969",
+)
+
 
 def cors_origins() -> list[str]:
     """Return comma-separated browser origins configured for this environment."""
-    configured = os.getenv(
-        "CORS_ORIGINS",
-        "http://localhost:5173,http://localhost:6969",
-    )
-    return [origin.strip() for origin in configured.split(",") if origin.strip()]
+    configured = os.getenv("CORS_ORIGINS", "")
+    configured_origins = tuple(origin.strip() for origin in configured.split(",") if origin.strip())
+    return list(dict.fromkeys((*DEFAULT_CORS_ORIGINS, *configured_origins)))
 
 
 @asynccontextmanager
